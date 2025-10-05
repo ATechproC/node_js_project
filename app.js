@@ -12,6 +12,10 @@ app.get("/new-user", (req, res) => {
     res.render("userInfo")
 });
 
+app.get("/", (req, res) => {
+    res.send('this is the home page')
+})
+
 // Post : 
 
 app.use(express.urlencoded({ extended: true }));
@@ -24,7 +28,7 @@ app.post("/new-user", async (req, res) => {
     newUser.userName = userName;
     await newUser.save();
 
-    res.json(newUser);
+    res.redirect("/");
 })
 
 // Delete Method : 
@@ -46,10 +50,13 @@ app.delete("/new-user/:userId", async (req, res) => {
 //  get all Users from DB : 
 
 app.get("/users", async (req, res) => {
-
-    const allUsers = await User.find();
-
-    res.json(allUsers)
+    
+    try {
+        const allUsers = await User.find();
+        res.json(allUsers)
+    }catch(err) {
+        console.log("error happened while trying fetching all users : ", err)
+    }
 })
 
 // get the user with the following id : 
@@ -65,6 +72,19 @@ app.get("/users/:userId", async (req, res) => {
         console.log("error while fetching the user with id ", userId ," : ", err)
     }
 })
+
+// get all data from DB and show it to the user : 
+
+// get all users from DB and show them : 
+
+app.get("/show-users", async (req, res) => {
+    try {
+        const allUsers = await User.find();
+        res.render("show-users", {title : "Users", data : allUsers})
+    } catch (err) {
+        console.log("error happened while trying showing all users : ", err)
+    }
+});
 
 mongoose.connect(process.env.MONGO_URI)
 .then(() => {

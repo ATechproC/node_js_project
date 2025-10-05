@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> <%= title %> | Shopping</title>
+</head>
+<body>
+    <h1>Show all users</h1>
+    <% data.forEach(user => { %>
+        <h2><%= user.userName %></h2>
+    <% }) %>
+</body>
+</html>
