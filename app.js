@@ -27,12 +27,34 @@ liveReloadServer.server.once("connection", () => {
 
 app.set("view engine", "ejs");
 
-app.get("/new-user", (req, res) => {
-    res.render("userInfo")
-});
+// home page :
 
 app.get("/", (req, res) => {
-    res.send('this is the home page')
+    res.render("index")
+});
+
+// add Costumer page :
+
+app.get("/user/add.html", (req, res) => {
+    res.render("user/add");
+})
+
+// View user info page : 
+
+app.get("/user/view.html", (req, res) => {
+    res.render("user/view");
+})
+
+// Edit user info page :
+
+app.get("/user/edit.html", (req, res) => {
+    res.render("user/edit");
+})
+
+// search page :
+
+app.get("/user/search.html", (req, res) => {
+    res.render("user/search");
 })
 
 // Post : 
