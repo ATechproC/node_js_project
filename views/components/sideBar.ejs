@@ -1,0 +1,19 @@
+<ul class="nav nav-pills flex-column mb-auto">
+    <li class="nav-item">
+        <a href="/" class="nav-link text-white <%= currentPage === 'home' ? 'active' : null %>" aria-current="page">
+            <svg class="bi pe-none me-2" width="16" height="16">
+                <use xlink:href="#home" />
+            </svg>
+            <span class="sidebar-text"> Home </span>
+        </a>
+    </li>
+
+    <li>
+        <a href="./user/add.html" class="nav-link text-white <%= currentPage === 'add' ? 'active' : null %>">
+            <svg class="bi pe-none me-2" width="16" height="16">
+                <use xlink:href="#people-circle" />
+            </svg>
+            <span class="sidebar-text"> Add Customers </span>
+        </a>
+    </li>
+</ul>
