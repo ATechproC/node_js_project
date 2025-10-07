@@ -11,6 +11,9 @@ app.use(express.static('public'))
 
 require("dotenv").config();
 
+// export costumer model :
+
+const Costumer = require("./models/costumer");
 
 // connect Live reload :
 
@@ -29,8 +32,13 @@ app.set("view engine", "ejs");
 
 // home page :
 
-app.get("/", (req, res) => {
-    res.render("index")
+app.get("/", async (req, res) => {
+    try {
+        const costumers = await Costumer.find();
+        res.render("index", { costumers })
+    } catch (err) {
+        console.log("error happened while trying to fetch costumers data :", err)
+    }
 });
 
 // add Costumer page :
@@ -126,6 +134,39 @@ app.get("/show-users", async (req, res) => {
         console.log("error happened while trying showing all users : ", err)
     }
 });
+
+// Add new user :
+
+app.post("/user/add.html", async (req, res) => {
+    try {
+        const newCostumer = new Costumer(req.body);
+        await newCostumer.save();
+        res.redirect("/user/add.html")
+        console.log(req.body)
+    } catch (err) {
+        console.log("error happened while trying add a new costumer", err)
+    }
+})
+
+// Edit the user info :
+
+// app.put("/user/edit.html/:userId", async (req, res) => {
+//     const { userId } = req.params;
+//     const {firstName, lastName, phoneNumber, email, age,gender, country} = req.body;
+//     try {
+//         const editedUser = await Costumer.findById(userId);
+//         editedUser.firstName = firstName;
+//         editedUser.lastName = lastName;
+//         editedUser.phoneNumber = phoneNumber;
+//         editedUser.email = email;
+//         editedUser.age = age;
+//         editedUser.gender = gender;
+//         editedUser.country = country;
+//         res.redirect("/");
+//     } catch (err) {
+//         console.log("error happened while trying to modify info : ", userId, err)
+//     }
+// })
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {

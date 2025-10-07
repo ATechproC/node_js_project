@@ -2,10 +2,12 @@
 <html lang="en" data-bs-theme="auto">
   <head>
     <script src="../js/color-modes.js"></script>
+
     <link
       rel="stylesheet"
       href="../bootstrap-icons-1.10.5/font/bootstrap-icons.min.css"
     />
+
     <link rel="shortcut icon" href="../img/ali.png" type="image/x-icon">
 
     <meta charset="utf-8" />
@@ -20,7 +22,7 @@
 
     <link href="../css/bootstrap.min.css" rel="stylesheet" />
 
-       <link href="css/sidebar.css" rel="stylesheet" />
+    <link href="css/sidebar.css" rel="stylesheet" />
 
     <!-- Custom styles for this template -->
     <link href="../css/sidebars.css" rel="stylesheet" />
@@ -201,14 +203,7 @@
           <p class="me-md-5"> <span class="fw-medium fs-6">Id :</span> 6487021520bcf1af6319484c</p>
         </nav>
 
-
-
-
-
-
-
-
-        <form class="mx-0 row gx-3 gy-4 mt-2">
+        <form action="/user/edit.html" class="mx-0 row gx-3 gy-4 mt-2" method="post">
           <div class="col-md-6">
             <label for="inputfirstName4" class="form-label">First Name:</label>
             <input
@@ -216,6 +211,7 @@
               type="text"
               class="form-control"
               id="inputfirstName4"
+              name="firstName"
             />
           </div>
           <div class="col-md-6">
@@ -225,6 +221,7 @@
               type="text"
               class="form-control"
               id="inputlastName4"
+              name="lastName"
             />
           </div>
 
@@ -235,6 +232,7 @@
               type="email"
               class="form-control"
               id="inputemail4"
+              name="email"
             />
           </div>
           <div class="col-md-6">
@@ -244,6 +242,7 @@
               type="number"
               class="form-control"
               id="inputtele4"
+              name="phoneNumber"
             />
           </div>
 
@@ -255,6 +254,7 @@
                 type="number"
                 class="form-control"
                 id="inputage4"
+                name="age"
               />
             </div>
           </div>
@@ -262,7 +262,7 @@
           <div>
             <div class="col-md-6">
               <label for="inputCountry" class="form-label">Country:</label>
-              <select id="inputCountry" class="form-select">
+              <select id="inputCountry" class="form-select" name="country">
                 <option selected hidden disabled>Choose here ...</option>
 
                 <option>Morocco</option>
