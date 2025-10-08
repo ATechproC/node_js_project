@@ -49,15 +49,27 @@ app.get("/user/add.html", (req, res) => {
 
 // View user info page : 
 
-app.get("/user/view.html", (req, res) => {
-    res.render("user/view");
+app.get("/user/:userId", async (req, res) => {
+const {userId} = req.params;
+try {
+    const customersDetails = await Costumer.findById(userId);
+    res.render("user/view", {customersDetails});
+}catch(err) {
+    console.log("error happened while trying to get " + userId + " " + err)
+}
 })
 
 // Edit user info page :
 
-app.get("/user/edit.html", (req, res) => {
-    res.render("user/edit");
-})
+// app.get("/user/:userId", async (req, res) => {
+//     const { userId } = req.params;
+//     try {
+//         const customersDetails = await Costumer.findById(userId);
+//         res.render("user/edit", { customersDetails });
+//     } catch (err) {
+//         console.log("error happened while trying to get " + userId + " " + err)
+//     }
+// })
 
 // search page :
 
@@ -150,18 +162,20 @@ app.post("/user/add.html", async (req, res) => {
 
 // Edit the user info :
 
-// app.put("/user/edit.html/:userId", async (req, res) => {
+// app.put("/user/edit/:userId", async (req, res) => {
 //     const { userId } = req.params;
 //     const {firstName, lastName, phoneNumber, email, age,gender, country} = req.body;
 //     try {
 //         const editedUser = await Costumer.findById(userId);
-//         editedUser.firstName = firstName;
-//         editedUser.lastName = lastName;
-//         editedUser.phoneNumber = phoneNumber;
-//         editedUser.email = email;
-//         editedUser.age = age;
-//         editedUser.gender = gender;
-//         editedUser.country = country;
+//         editedUser = {
+//             ...editedUser, 
+//             firstName, 
+//             lastName, 
+//             phoneNumber, 
+//             email, 
+//             age, 
+//             gender, 
+//             country}
 //         res.redirect("/");
 //     } catch (err) {
 //         console.log("error happened while trying to modify info : ", userId, err)
