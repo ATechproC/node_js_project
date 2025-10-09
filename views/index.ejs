@@ -161,7 +161,7 @@
                 <td><%= customer.gender %></td>
                 <td><%= customer.country %></td>
                 <td>30</td>
-                <td>1 days ago </td>
+                <td><%= moment(customer.updatedAt).fromNow() %></td>
                 <td>
                   <a data-bs-toggle="tooltip" data-bs-title="View details" data-bs-placement="top"
                     class="btn btn-primary btn-sm" href="./user/<%= customer._id %>"><i class="bi bi-eye"></i></a>

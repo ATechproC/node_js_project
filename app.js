@@ -28,6 +28,10 @@ liveReloadServer.server.once("connection", () => {
     }, 100);
 });
 
+// Moment library : 
+
+const moment = require("moment");
+
 app.set("view engine", "ejs");
 
 // home page :
@@ -35,7 +39,7 @@ app.set("view engine", "ejs");
 app.get("/", async (req, res) => {
     try {
         const costumers = await Costumer.find();
-        res.render("index", { costumers })
+        res.render("index", { costumers, moment })
     } catch (err) {
         console.log("error happened while trying to fetch costumers data :", err)
     }
@@ -53,7 +57,7 @@ app.get("/user/:userId", async (req, res) => {
 const {userId} = req.params;
 try {
     const customersDetails = await Costumer.findById(userId);
-    res.render("user/view", {customersDetails});
+    res.render("user/view", {customersDetails, moment});
 }catch(err) {
     console.log("error happened while trying to get " + userId + " " + err)
 }
