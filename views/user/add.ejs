@@ -174,8 +174,10 @@
             <select id="inputCountry" class="form-select" name="country">
               <option selected hidden disabled>Choose here ...</option>
 
-              <option>Morocco</option>
-              <option>Egypt</option>
+              <!-- show all world countries -->
+              <% countries.forEach(country => { %>
+                <option value="<%= country.name %>"><%= country.name %></option>
+              <% }) %>
             </select>
           </div>
         </div>

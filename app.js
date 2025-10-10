@@ -1,3 +1,5 @@
+const countries = require("./data/index");
+
 const express = require("express");
 const app = express();
 
@@ -32,6 +34,11 @@ liveReloadServer.server.once("connection", () => {
 
 const moment = require("moment");
 
+// delete method : 
+
+var methodOverride = require('method-override')
+app.use(methodOverride('_method'))
+
 app.set("view engine", "ejs");
 
 // home page :
@@ -48,32 +55,32 @@ app.get("/", async (req, res) => {
 // add Costumer page :
 
 app.get("/user/add.html", (req, res) => {
-    res.render("user/add");
+    res.render("user/add", {countries});
 })
 
 // View user info page : 
 
-app.get("/user/:userId", async (req, res) => {
-const {userId} = req.params;
-try {
-    const customersDetails = await Costumer.findById(userId);
-    res.render("user/view", {customersDetails, moment});
-}catch(err) {
-    console.log("error happened while trying to get " + userId + " " + err)
-}
+app.get("/view/:userId", async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const customersDetails = await Costumer.findById(userId);
+        res.render("user/view", { customersDetails, moment });
+    } catch (err) {
+        console.log("error happened while trying to get " + userId + " " + err)
+    }
 })
 
 // Edit user info page :
 
-// app.get("/user/:userId", async (req, res) => {
-//     const { userId } = req.params;
-//     try {
-//         const customersDetails = await Costumer.findById(userId);
-//         res.render("user/edit", { customersDetails });
-//     } catch (err) {
-//         console.log("error happened while trying to get " + userId + " " + err)
-//     }
-// })
+app.get("/edit/:userId", async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const customersDetails = await Costumer.findById(userId);
+        res.render("user/edit", { customersDetails, countries });
+    } catch (err) {
+        console.log("error happened while trying to get " + userId + " " + err)
+    }
+})
 
 // search page :
 
@@ -157,8 +164,7 @@ app.post("/user/add.html", async (req, res) => {
     try {
         const newCostumer = new Costumer(req.body);
         await newCostumer.save();
-        res.redirect("/user/add.html")
-        console.log(req.body)
+        res.redirect("/")
     } catch (err) {
         console.log("error happened while trying add a new costumer", err)
     }
@@ -166,7 +172,7 @@ app.post("/user/add.html", async (req, res) => {
 
 // Edit the user info :
 
-// app.put("/user/edit/:userId", async (req, res) => {
+// app.put("/edit/:userId", async (req, res) => {
 //     const { userId } = req.params;
 //     const {firstName, lastName, phoneNumber, email, age,gender, country} = req.body;
 //     try {
@@ -179,12 +185,26 @@ app.post("/user/add.html", async (req, res) => {
 //             email, 
 //             age, 
 //             gender, 
-//             country}
+//             country
+//         }
 //         res.redirect("/");
 //     } catch (err) {
 //         console.log("error happened while trying to modify info : ", userId, err)
 //     }
+//     res.send(userId)
 // })
+
+// delete Costumer Info : 
+
+app.delete("/edit/:costumerId", async (req, res) => {
+    const { costumerId } = req.params;
+    try {
+        await Costumer.findByIdAndDelete(costumerId);
+        res.redirect("/");
+    } catch (err) {
+        console.log("error happened while trying to delete a costumer Id");
+    }
+})
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
