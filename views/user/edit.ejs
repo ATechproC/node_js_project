@@ -152,10 +152,10 @@
           </ol>
 
 
-          <p class="me-md-5"> <span class="fw-medium fs-6">Id :</span> 6487021520bcf1af6319484c</p>
+          <p class="me-md-5"> <span class="fw-medium fs-6">Id :</span> <%= customersDetails._id %></p>
         </nav>
 
-        <form action="/user/edit.html" class="mx-0 row gx-3 gy-4 mt-2" method="post">
+        <form action="/edit/<%= customersDetails._id %>?_method=PUT" class="mx-0 row gx-3 gy-4 mt-2" method="post">
           <div class="col-md-6">
             <label for="inputfirstName4" class="form-label">First Name:</label>
             <input placeholder="Ali..." type="text" class="form-control" id="inputfirstName4" name="firstName"
@@ -164,25 +164,25 @@
           <div class="col-md-6">
             <label for="inputlastName4" class="form-label">Last Name:</label>
             <input placeholder="Hassan..." type="text" class="form-control" id="inputlastName4" name="lastName"
-              value="<%= customersDetails.firstName %>" />
+              value="<%= customersDetails.lastName %>" />
           </div>
 
           <div class="col-md-6">
             <label for="inputemail4" class="form-label">Email:</label>
             <input placeholder="ali@gmail.com" type="email" class="form-control" id="inputemail4" name="email"
-              value="<%= customersDetails.firstName %>" />
+              value="<%= customersDetails.email %>" />
           </div>
           <div class="col-md-6">
             <label for="inputtele4" class="form-label">Telephone:</label>
             <input placeholder="011987899" type="number" class="form-control" id="inputtele4" name="phoneNumber"
-              value="<%= customersDetails.firstName %>" />
+              value="<%= customersDetails.phoneNumber %>" />
           </div>
 
           <div>
             <div class="col-md-6">
               <label for="inputage4" class="form-label">Age:</label>
               <input placeholder="Your Age: ..." type="number" class="form-control" id="inputage4" name="age"
-                value="<%= customersDetails.firstName %>" />
+                value="<%= customersDetails.age %>" />
             </div>
           </div>
 
@@ -190,12 +190,8 @@
             <div class="col-md-6">
               <label for="inputCountry" class="form-label">Country:</label>
               <select id="inputCountry" class="form-select" name="country">
-                <option selected hidden disabled>Choose here ...</option>
-
                 <% countries.forEach(country=> { %>
-                  <option value="<%= country.name %>">
-                    <%= country.name %>
-                  </option>
+                  <option value="<%= country.name %>" <%= customersDetails.country === country.name ? "selected" : null %>><%= country.name %> </option>
                   <% }) %>
               </select>
             </div>
@@ -205,9 +201,10 @@
             <div class="col-md-6">
               <label for="inputGender" class="form-label">Gender:</label>
               <select id="inputGender" class="form-select">
-                <option selected hidden disabled>Choose here ...</option>
-                <option>Male</option>
-                <option>Female</option>
+                <% const gender=["Male", "Female" ] %>
+                  <% gender.forEach(gen=> { %>
+                    <option value="<%= gen %>" <%= customersDetails.country === gen ? "selected" : null  %>><%= gen %></option>
+                  <% }) %>
               </select>
             </div>
           </div>

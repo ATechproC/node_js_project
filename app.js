@@ -55,7 +55,7 @@ app.get("/", async (req, res) => {
 // add Costumer page :
 
 app.get("/user/add.html", (req, res) => {
-    res.render("user/add", {countries});
+    res.render("user/add", { countries });
 })
 
 // View user info page : 
@@ -84,9 +84,18 @@ app.get("/edit/:userId", async (req, res) => {
 
 // search page :
 
-app.get("/user/search.html", (req, res) => {
-    res.render("user/search");
-})
+// app.get("/user/search.html", async (req, res) => {
+//     try {
+//         const result = await Costumer.find({$or : [{firstName : "anass"}, {lastName : "anass"}]});
+//         res.render("user/search", {result})
+//     }catch(err) {
+//         console.log(err)
+//     }
+// })
+
+// app.post("/", (res, req) => {
+//     res.redirect("/")
+// })
 
 // Post : 
 
@@ -172,27 +181,12 @@ app.post("/user/add.html", async (req, res) => {
 
 // Edit the user info :
 
-// app.put("/edit/:userId", async (req, res) => {
-//     const { userId } = req.params;
-//     const {firstName, lastName, phoneNumber, email, age,gender, country} = req.body;
-//     try {
-//         const editedUser = await Costumer.findById(userId);
-//         editedUser = {
-//             ...editedUser, 
-//             firstName, 
-//             lastName, 
-//             phoneNumber, 
-//             email, 
-//             age, 
-//             gender, 
-//             country
-//         }
-//         res.redirect("/");
-//     } catch (err) {
-//         console.log("error happened while trying to modify info : ", userId, err)
-//     }
-//     res.send(userId)
-// })
+app.put("/edit/:costumerId", (req, res) => {
+    Costumer.updateOne({ _id: req.params.costumerId }, req.body)
+        .then(() => {
+            res.redirect("/");
+    });
+});
 
 // delete Costumer Info : 
 
@@ -205,6 +199,8 @@ app.delete("/edit/:costumerId", async (req, res) => {
         console.log("error happened while trying to delete a costumer Id");
     }
 })
+
+
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
