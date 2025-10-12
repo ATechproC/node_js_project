@@ -8,6 +8,8 @@ const connectLivereload = require("connect-livereload");
 
 app.use(express.static('public'));
 
+const port = process.env.PORT || 3001;
+
 require("dotenv").config();
 
 app.use(express.urlencoded({ extended: true }));
@@ -49,7 +51,7 @@ app.use(apiEndpointsRoute);
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
-        app.listen(3000, () => {
+        app.listen(port, () => {
             console.log("http://localhost:3000");
         })
 })
