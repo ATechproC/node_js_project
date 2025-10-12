@@ -1,23 +1,16 @@
-const countries = require("./data/index");
-
 const express = require("express");
 const app = express();
+
+const mongoose = require("mongoose");
 
 const livereload = require("livereload");
 const connectLivereload = require("connect-livereload");
 
-const mongoose = require("mongoose");
-const User = require("./models/user");
-
-app.use(express.static('public'))
+app.use(express.static('public'));
 
 require("dotenv").config();
 
-// export costumer model :
-
-const Costumer = require("./models/costumer");
-
-// connect Live reload :
+app.use(express.urlencoded({ extended: true }));
 
 const liveReloadServer = livereload.createServer();
 liveReloadServer.watch(__dirname + "/public");
@@ -30,10 +23,6 @@ liveReloadServer.server.once("connection", () => {
     }, 100);
 });
 
-// Moment library : 
-
-const moment = require("moment");
-
 // delete method : 
 
 var methodOverride = require('method-override')
@@ -41,185 +30,26 @@ app.use(methodOverride('_method'))
 
 app.set("view engine", "ejs");
 
-// home page :
+// import routes :
 
-app.get("/", async (req, res) => {
-    try {
-        const costumers = await Costumer.find();
-        res.render("index", { costumers, moment })
-    } catch (err) {
-        console.log("error happened while trying to fetch costumers data :", err)
-    }
-});
+const allRoutes = require("./routes/allRoutes");
+app.use(allRoutes);
 
-// add Costumer page :
+const addCostumerRoute = require("./routes/addCostumer");
+app.use(addCostumerRoute);
 
-app.get("/user/add.html", (req, res) => {
-    res.render("user/add", { countries });
-})
+const editCostumerInfoRoute = require("./routes/editCostumerInfo");
+app.use(editCostumerInfoRoute);
 
-// View user info page : 
+const searchRoute = require("./routes/search");
+app.use(searchRoute);
 
-app.get("/view/:userId", async (req, res) => {
-    const { userId } = req.params;
-    try {
-        const customersDetails = await Costumer.findById(userId);
-        res.render("user/view", { customersDetails, moment });
-    } catch (err) {
-        console.log("error happened while trying to get " + userId + " " + err)
-    }
-})
-
-// Edit user info page :
-
-app.get("/edit/:userId", async (req, res) => {
-    const { userId } = req.params;
-    try {
-        const customersDetails = await Costumer.findById(userId);
-        res.render("user/edit", { customersDetails, countries });
-    } catch (err) {
-        console.log("error happened while trying to get " + userId + " " + err)
-    }
-})
-
-// search page :
-
-app.use(express.urlencoded({ extended: true }));
-
-app.get("/search", async (req, res) => {
-    const { query } = req.query;
-    try {
-        const result = await Costumer.find({ $or: [{ firstName: query }, { lastName: query }] });
-        res.render("user/search", { result });
-    } catch (err) {
-        console.log(err)
-    }
-})
-
-app.post("/search-costumer", (req, res) => {
-    const { query } = req.body;
-    res.redirect(`/search?query=${query.trim()}`);
-})
-
-app.delete("/search/:costumerId", async (req, res) => {
-    const { costumerId } = req.params;
-    try {
-        await Costumer.findByIdAndDelete(costumerId);
-        res.redirect("/");
-    } catch (err) {
-        console.log("error happened while trying to delete a costumer Id");
-    }
-});
-
-// Post : 
-
-app.use(express.urlencoded({ extended: true }));
-
-app.post("/new-user", async (req, res) => {
-
-    const { userName } = req.body;
-
-    const newUser = new User();
-    newUser.userName = userName;
-    await newUser.save();
-
-    res.redirect("/");
-})
-
-// Delete Method : 
-
-app.delete("/new-user/:userId", async (req, res) => {
-
-    const { userId } = req.params;
-
-    try {
-        const deletedUser = await User.findByIdAndDelete(userId);
-
-        res.json(deletedUser);
-
-    } catch (err) {
-        console.log("error happened while trying deleted the user with Id ", userId, err)
-    }
-})
-
-//  get all Users from DB : 
-
-app.get("/users", async (req, res) => {
-
-    try {
-        const allUsers = await User.find();
-        res.json(allUsers)
-    } catch (err) {
-        console.log("error happened while trying fetching all users : ", err)
-    }
-})
-
-// get the user with the following id : 
-
-app.get("/users/:userId", async (req, res) => {
-
-    const { userId } = req.params;
-
-    try {
-        const user = await User.findById(userId)
-        res.json(user);
-    } catch (err) {
-        console.log("error while fetching the user with id ", userId, " : ", err)
-    }
-})
-
-// get all data from DB and show it to the user : 
-
-// get all users from DB and show them : 
-
-app.get("/show-users", async (req, res) => {
-    try {
-        const allUsers = await User.find();
-        res.render("show-users", { title: "Users", data: allUsers })
-    } catch (err) {
-        console.log("error happened while trying showing all users : ", err)
-    }
-});
-
-// Add new user :
-
-app.post("/user/add.html", async (req, res) => {
-    try {
-        const newCostumer = new Costumer(req.body);
-        await newCostumer.save();
-        res.redirect("/")
-    } catch (err) {
-        console.log("error happened while trying add a new costumer", err)
-    }
-})
-
-// Edit the user info :
-
-app.put("/edit/:costumerId", (req, res) => {
-    Costumer.updateOne({ _id: req.params.costumerId }, req.body)
-        .then(() => {
-            res.redirect("/");
-        });
-});
-
-// delete Costumer Info : 
-
-app.delete("/edit/:costumerId", async (req, res) => {
-    const { costumerId } = req.params;
-    try {
-        await Costumer.findByIdAndDelete(costumerId);
-        res.redirect("/");
-    } catch (err) {
-        console.log("error happened while trying to delete a costumer Id");
-    }
-})
-
-
+const apiEndpointsRoute = require("./routes/apiEndpoints");
+app.use(apiEndpointsRoute);
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         app.listen(3000, () => {
             console.log("http://localhost:3000");
         })
-    })
-
+})
