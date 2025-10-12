@@ -84,18 +84,32 @@ app.get("/edit/:userId", async (req, res) => {
 
 // search page :
 
-// app.get("/user/search.html", async (req, res) => {
-//     try {
-//         const result = await Costumer.find({$or : [{firstName : "anass"}, {lastName : "anass"}]});
-//         res.render("user/search", {result})
-//     }catch(err) {
-//         console.log(err)
-//     }
-// })
+app.use(express.urlencoded({ extended: true }));
 
-// app.post("/", (res, req) => {
-//     res.redirect("/")
-// })
+app.get("/search", async (req, res) => {
+    const { query } = req.query;
+    try {
+        const result = await Costumer.find({ $or: [{ firstName: query }, { lastName: query }] });
+        res.render("user/search", { result });
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+app.post("/search-costumer", (req, res) => {
+    const { query } = req.body;
+    res.redirect(`/search?query=${query.trim()}`);
+})
+
+app.delete("/search/:costumerId", async (req, res) => {
+    const { costumerId } = req.params;
+    try {
+        await Costumer.findByIdAndDelete(costumerId);
+        res.redirect("/");
+    } catch (err) {
+        console.log("error happened while trying to delete a costumer Id");
+    }
+});
 
 // Post : 
 
@@ -185,7 +199,7 @@ app.put("/edit/:costumerId", (req, res) => {
     Costumer.updateOne({ _id: req.params.costumerId }, req.body)
         .then(() => {
             res.redirect("/");
-    });
+        });
 });
 
 // delete Costumer Info : 

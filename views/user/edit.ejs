@@ -190,6 +190,7 @@
             <div class="col-md-6">
               <label for="inputCountry" class="form-label">Country:</label>
               <select id="inputCountry" class="form-select" name="country">
+                <option selected hidden>choose country...</option>
                 <% countries.forEach(country=> { %>
                   <option value="<%= country.name %>" <%= customersDetails.country === country.name ? "selected" : null %>><%= country.name %> </option>
                   <% }) %>

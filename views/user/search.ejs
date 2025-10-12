@@ -208,7 +208,7 @@
             <% result.forEach((costumer, index) => { %>
               <tr>
                 <th scope="row"><%= index + 1 %></th>
-                <td><%= costumer.firstName + costumer.lastName %></td>
+                <td><%= costumer.firstName + " " + costumer.lastName %></td>
                 <td><%= costumer.gender %></td>
                 <td><%= costumer.country %></td>
                 <td>
@@ -217,7 +217,7 @@
                     data-bs-title="View details"
                     data-bs-placement="top"
                     class="btn btn-primary btn-sm"
-                    href="./user/view.html"
+                    href="./view/<%= costumer._id %>"
                     ><i class="bi bi-eye"></i
                   ></a>
     
@@ -226,18 +226,21 @@
                     data-bs-title="Edit user"
                     data-bs-placement="top"
                     class="btn btn-primary btn-sm"
-                    href="./user/edit.html"
+                    href="./edit/<%= costumer._id %>"
                   >
                     <i class="bi bi-pencil"></i>
                   </a>
-                  <button
-                    data-bs-toggle="tooltip"
-                    data-bs-title="Delete user"
-                    data-bs-placement="top"
-                    class="btn btn-danger btn-sm"
-                  >
-                    <i class="bi bi-trash"></i>
-                  </button>
+                  <form style="display: inline-block;" action="/search/<%= costumer._id %>?_method=DELETE" method="post">
+                    <button
+                      data-bs-toggle="tooltip"
+                      data-bs-title="Delete user"
+                      data-bs-placement="top"
+                      class="btn btn-danger btn-sm"
+                      type="submit"
+                    >
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </form>
                 </td>
               </tr>
             <% }) %>
